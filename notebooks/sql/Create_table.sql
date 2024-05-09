@@ -104,3 +104,31 @@ CREATE TABLE IF NOT EXISTS subscription_source_table_data (
     "Subscribers lost" INTEGER,
     PRIMARY KEY ("Subscription source")
 );
+CREATE TABLE IF NOT EXISTS subscription_status_chart_data (
+    "Date" DATE,
+    "Subscription status" TEXT,
+    "Views" INTEGER,
+    PRIMARY KEY ("Date", "Subscription status")
+);
+ CREATE TABLE IF NOT EXISTS subscription_status_table_data (
+    "Subscription status" TEXT,
+    "Views" INTEGER,
+    "Watch time (hours)" TIME,
+    "Average view duration" TIME,
+    PRIMARY KEY ("Subscription status")
+);
+CREATE TABLE IF NOT EXISTS traffic_source_chart_data (
+    "Date" DATE,
+    "Traffic source" TEXT,
+    "Views" INTEGER,
+    PRIMARY KEY ("Date", "Traffic source")
+);
+CREATE TABLE IF NOT EXISTS traffic_source_table_data (
+    "Traffic source" TEXT,
+    "Views" INTEGER,
+    "Watch time (hours)" FLOAT,
+    "Average view duration" TIME,
+    "Impressions" FLOAT,
+    "Impressions click-through rate (%)" FLOAT,
+    PRIMARY KEY ("Traffic source")
+);
