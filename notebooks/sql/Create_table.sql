@@ -54,3 +54,29 @@ CREATE TABLE IF NOT EXISTS geography_table_data (
     "Average view duration" TIME,
     PRIMARY KEY ("Geography")
 );
+CREATE TABLE IF NOT EXISTS new_and_returning_viewers_chart_data (
+"Date" DATE,
+"New and returning viewers" TEXT,
+"Views" INTEGER,
+PRIMARY KEY ("Date", "New and returning viewers")
+);
+CREATE TABLE IF NOT EXISTS new_and_returning_viewers_table_data (
+"New and returning viewers" TEXT,
+"Views" INTEGER,
+"Watch time (hours)" FLOAT,
+"Average view duration" TIME,
+PRIMARY KEY ("New and returning viewers")
+);
+CREATE TABLE IF NOT EXISTS operating_system_chart_data (
+    "Date" DATE,
+    "Operating system" TEXT,
+    "Views" INTEGER,
+    PRIMARY KEY ("Date", "Operating system")
+);
+CREATE TABLE IF NOT EXISTS operating_system_table_data (
+    "Operating system" TEXT,
+    "Views" INTEGER,
+    "Watch time (hours)" FLOAT,
+    "Average view duration" TIME,
+    PRIMARY KEY ("Operating system")
+);
