@@ -132,3 +132,23 @@ CREATE TABLE IF NOT EXISTS traffic_source_table_data (
     "Impressions click-through rate (%)" FLOAT,
     PRIMARY KEY ("Traffic source")
 );
+CREATE TABLE IF NOT EXISTS viewer_age_statistics (
+    "Viewer age," VARCHAR(50) PRIMARY KEY,
+    "Views (%)" FLOAT,
+    "Average view duration" INTERVAL,
+    "Average percentage viewed (%)" FLOAT,
+    "Watch time (hours) (%)" FLOAT
+);
+CREATE TABLE IF NOT EXISTS viewer_gender_stats (
+    "Viewer gender" VARCHAR(50),
+    "Views (%)"FLOAT,
+    "Average view duration" TIME,
+    "Average percentage viewed (%)" FLOAT,
+    "Watch time (hours) (%)" FLOAT
+);
+CREATE TABLE IF NOT EXISTS viewership_data (
+    "Date" TEXT,
+    "Views" INT,
+    "Watch time (hours)" FLOAT,
+    "Average view duration" TIME
+);
