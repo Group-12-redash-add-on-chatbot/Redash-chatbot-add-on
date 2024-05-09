@@ -80,3 +80,27 @@ CREATE TABLE IF NOT EXISTS operating_system_table_data (
     "Average view duration" TIME,
     PRIMARY KEY ("Operating system")
 );
+CREATE TABLE IF NOT EXISTS sharing_service_chart_data (
+    "Date" DATE,
+    "Sharing service" TEXT,
+    "Shares" INTEGER,
+    PRIMARY KEY ("Date", "Sharing service")
+);
+CREATE TABLE IF NOT EXISTS sharing_service_table_data (
+"Sharing service" TEXT,
+"Shares" INTEGER,
+PRIMARY KEY ("Sharing service")
+);
+CREATE TABLE IF NOT EXISTS subscription_source_chart_data (
+    "Date" DATE,
+    "Subscription source" TEXT,
+    "Subscribers" INTEGER,
+    PRIMARY KEY ("Date", "Subscription source")
+);
+CREATE TABLE IF NOT EXISTS subscription_source_table_data (
+    "Subscription source" TEXT,
+    "Subscribers" INTEGER,
+    "Subscribers gained" INTEGER,
+    "Subscribers lost" INTEGER,
+    PRIMARY KEY ("Subscription source")
+);
