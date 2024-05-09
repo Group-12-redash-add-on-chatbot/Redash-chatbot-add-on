@@ -28,3 +28,29 @@ CREATE TABLE IF NOT EXISTS content_type_table_data (
     "Average view duration" TIME,
     PRIMARY KEY ("Content type")
 );
+CREATE TABLE IF NOT EXISTS device_type_chart_data (
+    "Date" DATE,
+    "Device type" TEXT,
+    "Views" INTEGER,
+    PRIMARY KEY ("Date", "Device type")
+);
+  CREATE TABLE IF NOT EXISTS device_type_table_data (
+    "Device type" DATE,
+    "Views" INTEGER,
+    "Watch time (hours)" FLOAT,
+    "Average view duration" TIME,
+    PRIMARY KEY ("Device type")
+);
+CREATE TABLE IF NOT EXISTS geography_chart_data (
+"Date" DATE,
+"Geography" TEXT,
+"Views" INTEGER,
+PRIMARY KEY ("Date", "Geography")
+);
+CREATE TABLE IF NOT EXISTS geography_table_data (
+    "Geography" TEXT,
+    "Views" INTEGER,
+    "Watch time (hours)" FLOAT,
+    "Average view duration" TIME,
+    PRIMARY KEY ("Geography")
+);
