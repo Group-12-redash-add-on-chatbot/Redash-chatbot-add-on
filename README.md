@@ -33,14 +33,14 @@
 
 
 <!-- Features-->
-## Features
+### Features
 * Summary of visualisations in the current dashboard
 * Insight about data returned by existing SQL queries
 * Auto generate SQL queries and visualisations 
 * Auto generate new Redash dashboards from existing and auto generated SQL queries and its associated visualisations.
 
 
-
+<!-- Installation-->
 ### Installation
 
 * https://www.python.org/ <a>Python</a>
@@ -52,7 +52,7 @@
 
 
 <!-- Work Plan -->
-# Work Plan
+### Work Plan
 
 * Basic Solution with Python and OpenAI API
 
