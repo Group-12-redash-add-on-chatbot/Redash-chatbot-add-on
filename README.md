@@ -41,18 +41,18 @@
 
 
 
-### scope_of_the_project
+### Installation
 
 * https://www.python.org/ <a>Python</a>
 * https://www.postgresql.org/<a>Postgres</a>
 * https://github.com/getredash/redash/wiki/Local-development-setup<a>Redash Installation</a>
 * https://github.com/RYees/redash-chatgpt-plugin<a>redash-chatgpt-plugin</a>
-
+* https://python.langchain.com/v0.1/docs/get_started/quickstart/<a>Langchain</a>
 
 
 
 <!-- Work Plan -->
-## work_plan
+# Work Plan
 
 * Basic Solution with Python and OpenAI API
 
