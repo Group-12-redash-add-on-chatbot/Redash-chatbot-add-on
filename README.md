@@ -1,7 +1,7 @@
 # 10 Academy week 3 challenges
 
 <div align="center">
-  <h2 align="center">Redash chatbot add-on: LLM based chatbot for Advanced Data Analytics, Visualisation, and Automated Insight Extraction</h2>
+  <h1 align="center">Redash chatbot add-on: LLM based chatbot for Advanced Data Analytics, Visualisation, and Automated Insight Extraction</h1>
 </div>
 
 
@@ -41,12 +41,57 @@ The scope of this project extends to developing a Redash add-on in the frontend 
     cd redash-chatbot-add-on
     python -m venv venv  | virtualenv venv
     source venv/bin/activate
-    ```
+    ``
+    
 3. **Install Requirements**
     While inside the virtual environment, install the project requirements:
     ```sh
-    pip install -r requirements.txt
+     $ sudo apt -y install docker.io docker-buildx docker-compose-v2
+    ## NOTE: You may need to remove the corresponding docker plugins first if the above command fails
+    $ sudo apt -y install build-essential curl docker-compose pwgen python3-venv xvfb
+
+
     ```
+    ### Add your user to the "docker" group
+    ```sh
+    $ sudo usermod -aG docker $USER
+    ```
+    ## Install Node Version Manager
+```sh
+  $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  ## You may need to save as a script file first, then change she-bang to point to correct shell
+  ```
+Now log out of your desktop, then back in again, for the group change to become effective and nvm to be available
+
+ ## Install NodeJS version 18
+```sh
+  $ nvm install --lts 18
+  $ nvm alias default 18
+  $ nvm use 18
+  ```
+
+ ## Install Yarn 1.x
+```sh
+  $ npm install -g yarn@1.22.22
+  ```
+
+ ##  make compose and build
+```sh
+  yarn
+  make build
+  make Compile_build
+  ```
+
+ ##  Start Redash locally, using the docker images you just built
+```sh
+  cd redash
+  make up
+  ```
+
+
+
+### The Redash web interface should also be available at http://localhost:5001, ready to be configured:
+
 ## Screenshots
 
 Navigate to the `screenshots` folder to view visual representations of the project.
