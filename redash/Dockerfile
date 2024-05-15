@@ -105,5 +105,8 @@ COPY --from=frontend-builder --chown=redash /frontend/client/dist /app/client/di
 RUN chown redash /app
 USER redash
 
+RUN pip install langchain-openai
+RUN pip install pandas
+# RUN pip install langchain_community
 ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["server"]
