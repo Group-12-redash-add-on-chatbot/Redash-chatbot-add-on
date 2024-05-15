@@ -1,79 +1,77 @@
 from flask import request, jsonify
-
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from redash.handlers.base import BaseResource
+from sqlalchemy import create_engine
 import os
-from sqlalchemy import create_engine, inspect
+import pandas as pd
 
-from redash.handlers.base import (
-    BaseResource
-)
-import os
-from openai import OpenAI
-VARIABLE_KEY = os.environ.get("OPENAI_API_KEY")
-client = OpenAI(
-  api_key=VARIABLE_KEY
-)
-
-
-# Gather database connection parameters from environment variables
-username = os.getenv("DB_USERNAME", "postgres")
-password = os.getenv("DB_PASSWORD", "postgres")
-host = os.getenv("DB_HOST", "postgres")
-port = os.getenv("DB_PORT", "5432")
-database = os.getenv("DB_DATABASE", "postgres")
-
-# Construct the database connection URL
-database_url = f"postgresql://{username}:{password}@{host}:{port}/{database}"
-
-# Create an engine instance
-engine = create_engine(database_url)
-
-def get_table_names(engine):
-    """Return a list of table names in the database."""
-    inspector = inspect(engine)
-    return [f'"{table_name}"' for table_name in inspector.get_table_names()]
-
-def get_column_names(engine, table_name):
-    """Return a list of column names for a specified table."""
-    inspector = inspect(engine)
+# Connect to postgres Database
+def connect_to_database(database_name, table_name, connection_params=None):
     try:
-        columns = inspector.get_columns(table_name)
-        return [f'"{column["name"]}"' for column in columns]
+        if connection_params is None:
+            connection_params = {
+                "host": "postgres",
+                "user": "postgres",
+                "password": ";",
+                "port": "5432",
+                "database": database_name
+            }
+        engine = create_engine(f"postgresql+psycopg2://{connection_params['user']}:{connection_params['password']}@{connection_params['host']}:{connection_params['port']}/{connection_params['database']}")
+        sql_query = f'SELECT * FROM {table_name}'
+        df = pd.read_sql(sql_query, con=engine)
+        return df
     except Exception as e:
-        print(f"Error fetching columns for table {table_name}: {e}")
-        return []
+        print(f"Error connecting to database: {e}")
+        return None
 
-def get_database_info(engine):
-    """Return a list of dictionaries with table names and their corresponding columns."""
-    inspector = inspect(engine)
-    table_dicts = []
-    for table_name in inspector.get_table_names():
-        column_names = get_column_names(engine, table_name)
-        table_dicts.append({"table_name": table_name, "column_names": column_names})
-    return table_dicts
+# Calling tables from the database
+df_cities = connect_to_database(database_name='Youtube_Analystics', table_name='viewers_per_city')
+df_gender = connect_to_database(database_name='Youtube_Analystics', table_name='gender_data')
+df_age = connect_to_database(database_name='Youtube_Analystics', table_name='Viewer_age')
+df_new_and_returning = connect_to_database(database_name='Youtube_Analystics', table_name='new_and_returning')
 
+# Initiating OpenAI Model
+VARIABLE_KEY = os.environ.get("OPENAI_API_KEY")
+llm = ChatOpenAI(
+    api_key=VARIABLE_KEY,
+    model="gpt-3.5-turbo",
+    temperature=0.7,
+)
+
+# Prompt for the model
+prompt = ChatPromptTemplate.from_template("""            
+        You are a redash visualization assistant, skilled in SQL queries and data visualization. 
+        You are only required to give answers for query and data visualization questions.
+        If asked about a topic outside these two, make sure to respond that you have no information regarding that question.
+        I am only here to help you with your query and data visualization questions. When asked to write queries, only provide the code without descriptions.
+        use the following tables:
+        - viewers_per_city {viewer_cities}
+        - gender_data {gender_data}
+        - age {age}
+        - new_and_returning {new_and_returning}
+     
+        Please ansewer the user question {user_question} by SQL query format
+        
+
+""")
+
+#Invoking OpenAI model to answer user questionss
 class ChatResource(BaseResource):
     def post(self):
         try:
             value = request.get_json()
             question = value.get('question')
-
-            # Fetch updated database info if your schema changes frequently
-            db_info = get_database_info(engine)
-            db_info_str = f"Database tables and columns: {db_info}"
-
-            # Making the completion request to OpenAI
-            completion = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": f"You are a redash visualization assistant, skilled in SQL queries and data visualization. Here's the current database schema: {db_info_str}. You are only required to give answers for query and data visualization questions.If asked about a topic outside these two, make sure to respond that you have no information regarding that question. I am only here to help you with your query and data visualization questions. When asked to write queries, only provide the code without descriptions."},
-                    {"role": "user", "content": question}
-                ]
-            )
-
-            # Extracting the answer from the completion
-            answer = completion.choices[0].message.content
-            response_data = {"answer": answer}
+            chain = prompt | llm
+            answer = chain.invoke({"user_question": question,
+                                   "viewer_cities": df_cities,
+                                   "gender_data":df_gender,
+                                   "gender_data":df_new_and_returning
+                                   
+                                   
+                                   })
+            response_data = {"answer": answer.content}
             return jsonify(response_data), 200
         except Exception as error:
-            print(f"An error occurred: {error}")
-            return jsonify({"error": str(error)}), 500
+            print(error)
+            return jsonify({"error": "An error occurred"}), 500
